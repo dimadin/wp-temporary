@@ -573,6 +573,22 @@ class WP_Temporary {
 	public static function clean() {
 		global $wpdb;
 
+		/**
+		 * Allow short-circuit of cleaning of temporaries.
+		 *
+		 * Passing a truthy value to the filter
+		 * will short-circuit process of cleaning.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param bool|mixed $pre_value Should cleaning be not done.
+		 *                               Default false to skip it.
+		 */
+		$pre = apply_filters( 'wp_temporary_clean_pre', false );
+		if ( false !== $pre ) {
+			return;
+		}
+
 		// Older than minute, just for case
 		$older_than_time = time() - MINUTE_IN_SECONDS;
 
@@ -623,6 +639,13 @@ class WP_Temporary {
 		foreach ( $temporaries as $temporary ) {
 			WP_Temporary::get_site( $temporary );
 		}
+
+		/**
+		 * Fires after the cleaning of temporaries has been done.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action( 'wp_temporary_clean_after' );
 	}
 }
 endif;
