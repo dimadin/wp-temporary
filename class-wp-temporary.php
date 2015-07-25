@@ -608,7 +608,7 @@ class WP_Temporary {
 		foreach ( $temporaries as $temporary ) {
 			WP_Temporary::get( $temporary );
 		}
-		
+
 		// Clean network wide temporaries
 		if ( is_multisite() ) {
 			$temporaries = $wpdb->get_col(
