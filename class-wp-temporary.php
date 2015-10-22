@@ -18,13 +18,13 @@ if ( ! class_exists( 'WP_Temporary' ) ) :
  * Simple and standardized way of storing data in the database temporarily.
  *
  * Holds a methods that are used the same way as transient
- * function for storing data in the database until they
- * expire. Basically, it's same as when transient are stored
+ * functions for storing data in the database until they
+ * expire. Basically, it's same as when transients are stored
  * in the database.
  *
  * Additionally, it provides two methods for updating values
  * of existing values without changing expiration time, and
- * method for cleaning database of expired temporaries.
+ * a method for cleaning database of expired temporaries.
  *
  * @since 1.0.0
  */
