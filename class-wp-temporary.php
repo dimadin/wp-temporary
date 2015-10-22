@@ -10,16 +10,6 @@
  * @link      https://github.com/dimadin/wp-temporary
  */
 
-/**
- * Plugin Name: WP_Temporary
- * Plugin URI:  http://blog.milandinic.com/wordpress/plugins/wp-temporary/
- * Description: Simple and standardized way of storing data in the database temporarily.
- * Author:      Milan Dinić
- * Author URI:  http://blog.milandinic.com/
- * Version:     1.0
- * License:     GPL
- */
-
 /* Exit if accessed directly */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
