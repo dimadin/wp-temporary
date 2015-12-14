@@ -158,6 +158,8 @@ class WP_Temporary {
 	 */
 	public static function set( $temporary, $value, $expiration = 0 ) {
 
+		$expiration = (int) $expiration;
+
 		/**
 		 * Filter a specific temporary before its value is set.
 		 *
@@ -421,7 +423,7 @@ class WP_Temporary {
 		 * @param mixed  $value     Value of site temporary.
 		 * @param string $temporary Temporary name.
 		 */
-		return apply_filters( 'site_temporary_' . $temporary, $value );
+		return apply_filters( 'site_temporary_' . $temporary, $value, $temporary );
 	}
 
 	/**
