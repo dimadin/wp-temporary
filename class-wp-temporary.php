@@ -100,19 +100,22 @@ class WP_Temporary {
 		 * @param mixed $pre_temporary The default value to return if the temporary does not exist.
 		 *                             Any value other than false will short-circuit the retrieval
 		 *                             of the temporary, and return the returned value.
+		 * @param string $temporary    Temporary name.
 		 */
-		$pre = apply_filters( 'pre_temporary_' . $temporary, false );
+		$pre = apply_filters( 'pre_temporary_' . $temporary, false, $temporary );
 		if ( false !== $pre ) {
 			return $pre;
 		}
 
 		$temporary_option = '_temporary_' . $temporary;
+		// NOTE: originally line below has WP 4.4+ function; use pre-4.4 code
 		if ( ! defined( 'WP_INSTALLING' ) ) {
 			// If option is not in alloptions, it is not autoloaded and thus has a timeout
 			$alloptions = wp_load_alloptions();
 			if ( ! isset( $alloptions[ $temporary_option ] ) ) {
 				$temporary_timeout = '_temporary_timeout_' . $temporary;
-				if ( get_option( $temporary_timeout ) < time() ) {
+				$timeout = get_option( $temporary_timeout );
+				if ( false !== $timeout && $timeout < time() ) {
 					delete_option( $temporary_option  );
 					delete_option( $temporary_timeout );
 					$value = false;
@@ -131,9 +134,10 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $value Value of temporary.
+		 * @param mixed  $value     Value of temporary.
+		 * @param string $temporary Temporary name.
 		 */
-		return apply_filters( 'temporary_' . $temporary, $value );
+		return apply_filters( 'temporary_' . $temporary, $value, $temporary );
 	}
 
 	/**
@@ -161,37 +165,50 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $value New value of temporary.
+		 * @param mixed  $value      New value of temporary.
+		 * @param int    $expiration Time until expiration in seconds.
+		 * @param string $temporary  Temporary name.
 		 */
-		$value = apply_filters( 'pre_set_temporary_' . $temporary, $value );
+		$value = apply_filters( 'pre_set_temporary_' . $temporary, $value, $expiration, $temporary );
 
-		$expiration = (int) $expiration;
+		/**
+		 * Filter the expiration for a temporary before its value is set.
+		 *
+		 * The dynamic portion of the hook name, `$temporary`, refers to the temporary name.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param int    $expiration Time until expiration in seconds. Use 0 for no expiration.
+		 * @param mixed  $value      New value of temporary.
+		 * @param string $temporary  Temporary name.
+		 */
+		$expiration = apply_filters( 'expiration_of_temporary_' . $temporary, $expiration, $value, $temporary );
 
 		$temporary_timeout = '_temporary_timeout_' . $temporary;
-		$temporary = '_temporary_' . $temporary;
-		if ( false === get_option( $temporary ) ) {
+		$temporary_option = '_temporary_' . $temporary;
+		if ( false === get_option( $temporary_option ) ) {
 			$autoload = 'yes';
 			if ( $expiration ) {
 				$autoload = 'no';
 				add_option( $temporary_timeout, time() + $expiration, '', 'no' );
 			}
-			$result = add_option( $temporary, $value, '', $autoload );
+			$result = add_option( $temporary_option, $value, '', $autoload );
 		} else {
 			// If expiration is requested, but the temporary has no timeout option,
 			// delete, then re-create temporary rather than update.
 			$update = true;
 			if ( $expiration ) {
 				if ( false === get_option( $temporary_timeout ) ) {
-					delete_option( $temporary );
+					delete_option( $temporary_option );
 					add_option( $temporary_timeout, time() + $expiration, '', 'no' );
-					$result = add_option( $temporary, $value, '', 'no' );
+					$result = add_option( $temporary_option, $value, '', 'no' );
 					$update = false;
 				} else {
 					update_option( $temporary_timeout, time() + $expiration );
 				}
 			}
 			if ( $update ) {
-				$result = update_option( $temporary, $value );
+				$result = update_option( $temporary_option, $value );
 			}
 		}
 
@@ -204,10 +221,11 @@ class WP_Temporary {
 			 *
 			 * @since 1.0.0
 			 *
-			 * @param mixed $value      Temporary value.
-			 * @param int   $expiration Time until expiration in seconds. Default 0.
+			 * @param mixed  $value      Temporary value.
+			 * @param int    $expiration Time until expiration in seconds. Default 0.
+			 * @param string $temporary  Temporary name.
 			 */
-			do_action( 'set_temporary_' . $temporary, $value, $expiration );
+			do_action( 'set_temporary_' . $temporary, $value, $expiration, $temporary );
 
 			/**
 			 * Fires after the value for a temporary has been set.
@@ -249,19 +267,20 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $value New value of temporary.
+		 * @param mixed  $value     New value of temporary.
+		 * @param string $temporary Temporary name.
 		 */
-		$value = apply_filters( 'pre_update_temporary_' . $temporary, $value );
+		$value = apply_filters( 'pre_update_temporary_' . $temporary, $value, $temporary );
 
 		$temporary_option = '_temporary_' . $temporary;
 
-		// If temporary don't exist, create new one,
+		// If temporary doesn't exist, create new one,
 		// otherwise update it with new value
 		if ( false === WP_Temporary::get( $temporary ) ) {
 			$result = WP_Temporary::set( $temporary, $value, $expiration );
 		} else {
-			$temporary = '_temporary_' . $temporary;
-			$result = update_option( $temporary, $value );
+			$temporary_option = '_temporary_' . $temporary;
+			$result = update_option( $temporary_option, $value );
 		}
 
 		if ( $result ) {
@@ -273,10 +292,11 @@ class WP_Temporary {
 			 *
 			 * @since 1.0.0
 			 *
-			 * @param mixed $value      Temporary value.
-			 * @param int   $expiration Time until expiration in seconds. Default 0.
+			 * @param mixed  $value      Temporary value.
+			 * @param int    $expiration Time until expiration in seconds. Default 0.
+			 * @param string $temporary  Temporary name.
 			 */
-			do_action( 'update_temporary_' . $temporary, $value, $expiration );
+			do_action( 'update_temporary_' . $temporary, $value, $expiration, $temporary );
 
 			/**
 			 * Fires after the value for a temporary has been updated.
@@ -363,11 +383,12 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $pre_site_temporary The default value to return if the site temporary does not exist.
-		 *                                  Any value other than false will short-circuit the retrieval
-		 *                                  of the temporary, and return the returned value.
+		 * @param mixed  $pre_site_temporary The default value to return if the site temporary does not exist.
+		 *                                   Any value other than false will short-circuit the retrieval
+		 *                                   of the temporary, and return the returned value.
+		 * @param string $temporary          Temporary name.
 		 */
-		$pre = apply_filters( 'pre_site_temporary_' . $temporary, false );
+		$pre = apply_filters( 'pre_site_temporary_' . $temporary, false, $temporary );
 
 		if ( false !== $pre ) {
 			return $pre;
@@ -397,7 +418,8 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $value Value of site temporary.
+		 * @param mixed  $value     Value of site temporary.
+		 * @param string $temporary Temporary name.
 		 */
 		return apply_filters( 'site_temporary_' . $temporary, $value );
 	}
@@ -428,11 +450,25 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $value Value of site temporary.
+		 * @param mixed  $value     Value of site temporary.
+		 * @param string $temporary Temporary name.
 		 */
-		$value = apply_filters( 'pre_set_site_temporary_' . $temporary, $value );
+		$value = apply_filters( 'pre_set_site_temporary_' . $temporary, $value, $temporary );
 
 		$expiration = (int) $expiration;
+
+		/**
+		 * Filter the expiration for a site temporary before its value is set.
+		 *
+		 * The dynamic portion of the hook name, `$temporary`, refers to the temporary name.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param int    $expiration Time until expiration in seconds. Use 0 for no expiration.
+		 * @param mixed  $value      New value of site temporary.
+		 * @param string $temporary  Temporary name.
+		 */
+		$expiration = apply_filters( 'expiration_of_site_temporary_' . $temporary, $expiration, $value, $temporary );
 
 		$temporary_timeout = '_site_temporary_timeout_' . $temporary;
 		$option = '_site_temporary_' . $temporary;
@@ -457,10 +493,11 @@ class WP_Temporary {
 			 *
 			 * @since 1.0.0
 			 *
-			 * @param mixed $value      Site temporary value.
-			 * @param int   $expiration Time until expiration in seconds. Default 0.
+			 * @param mixed  $value      Site temporary value.
+			 * @param int    $expiration Time until expiration in seconds. Default 0.
+			 * @param string $temporary  Temporary name.
 			 */
-			do_action( 'set_site_temporary_' . $temporary, $value, $expiration );
+			do_action( 'set_site_temporary_' . $temporary, $value, $expiration, $temporary );
 
 			/**
 			 * Fires after the value for a site temporary has been set.
@@ -504,19 +541,20 @@ class WP_Temporary {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param mixed $value New value of temporary.
+		 * @param mixed  $value     New value of temporary.
+		 * @param string $temporary Temporary name.
 		 */
-		$value = apply_filters( 'pre_update_site_temporary_' . $temporary, $value );
+		$value = apply_filters( 'pre_update_site_temporary_' . $temporary, $value, $temporary );
 
 		$temporary_option = '_site_temporary_' . $temporary;
 
-		// If temporary don't exist, create new one,
+		// If temporary doesn't exist, create new one,
 		// otherwise update it with new value
 		if ( false === WP_Temporary::get_site( $temporary ) ) {
 			$result = WP_Temporary::set_site( $temporary, $value, $expiration );
 		} else {
-			$temporary = '_site_temporary_' . $temporary;
-			$result = update_site_option( $temporary, $value );
+			$temporary_option = '_site_temporary_' . $temporary;
+			$result = update_site_option( $temporary_option, $value );
 		}
 
 		if ( $result ) {
@@ -528,10 +566,11 @@ class WP_Temporary {
 			 *
 			 * @since 1.0.0
 			 *
-			 * @param mixed $value      Temporary value.
-			 * @param int   $expiration Time until expiration in seconds. Default 0.
+			 * @param mixed  $value      Temporary value.
+			 * @param int    $expiration Time until expiration in seconds. Default 0.
+			 * @param string $temporary  Temporary name.
 			 */
-			do_action( 'update_site_temporary_' . $temporary, $value, $expiration );
+			do_action( 'update_site_temporary_' . $temporary, $value, $expiration, $temporary );
 
 			/**
 			 * Fires after the value for a temporary has been updated.
