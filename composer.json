@@ -13,6 +13,6 @@
 		}
 	],
 	"autoload": {
-        "files": ["class-wp-temporary.php"]
-    }
+		"classmap": ["class-wp-temporary.php"]
+	}
 }
