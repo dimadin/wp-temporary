@@ -6,7 +6,7 @@
  * @version   1.0
  * @author    Milan Dinić <blog.milandinic.com>
  * @copyright Copyright (c) 2015, Milan Dinić
- * @license   http://opensource.org/licenses/gpl-2.0.php GPL v2 or later
+ * @license   https://opensource.org/licenses/gpl-2.0.php GPL v2 or later
  * @link      https://github.com/dimadin/wp-temporary
  */
 
