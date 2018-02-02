@@ -13,7 +13,7 @@
 /* Exit if accessed directly */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'WP_Temporary' ) ) :
+if ( ! class_exists( 'WP_Temporary', false ) ) :
 /**
  * Simple and standardized way of storing data in the database temporarily.
  *
