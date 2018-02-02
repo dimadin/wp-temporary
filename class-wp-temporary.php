@@ -3,7 +3,7 @@
  * Simple and standardized way of storing data in the database temporarily.
  *
  * @package   WP_Temporary
- * @version   1.0
+ * @version   1.0.0
  * @author    Milan Dinić <blog.milandinic.com>
  * @copyright Copyright (c) 2015, Milan Dinić
  * @license   https://opensource.org/licenses/gpl-2.0.php GPL v2 or later
