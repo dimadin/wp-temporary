@@ -77,12 +77,12 @@ class Tests_Site_WP_Temporary extends WP_UnitTestCase {
 		$this->assertTrue( WP_Temporary::set_site( $key, $value, 100 ) );
 
 		// Ensure the temporary timeout is set for 100-101 seconds in the future.
-		$this->assertGreaterThanOrEqual( $now + 100, get_option( '_site_temporary_timeout_' . $key ) );
-		$this->assertLessThanOrEqual( $now + 101, get_option( '_site_temporary_timeout_' . $key ) );
+		$this->assertGreaterThanOrEqual( $now + 100, get_site_option( '_site_temporary_timeout_' . $key ) );
+		$this->assertLessThanOrEqual( $now + 101, get_site_option( '_site_temporary_timeout_' . $key ) );
 
 		// Update the timeout to a second in the past and watch the temporary be invalidated.
 		$this->assertEquals( $value, WP_Temporary::get_site( $key ) );
-		update_option( '_site_temporary_timeout_' . $key, $now - 1 );
+		update_site_option( '_site_temporary_timeout_' . $key, $now - 1 );
 		$this->assertFalse( WP_Temporary::get_site( $key ) );
 	}
 
@@ -204,6 +204,14 @@ class Tests_Site_WP_Temporary extends WP_UnitTestCase {
 	 * @since 1.0.0
 	 */
 	public function test_set_site_temporary_is_not_stored_as_autoload_option() {
+		if ( version_compare( $GLOBALS['wp_version'], '4.6', '<' ) ) {
+			$this->markTestSkipped( 'Does not apply when in WordPress before version 4.6.' );
+		}
+
+		if ( is_multisite() ) {
+			$this->markTestSkipped( 'Does not apply when used in multisite.' );
+		}
+
 		$key   = rand_str();
 		$value = rand_str();
 
