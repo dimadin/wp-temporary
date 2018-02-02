@@ -626,12 +626,11 @@ class WP_Temporary {
 		// Clean single site temporaries
 		$temporaries = $wpdb->get_col(
 			$wpdb->prepare(
-				"
-				SELECT REPLACE(option_name, '_temporary_timeout_', '') AS transient_name
+				"SELECT REPLACE(option_name, '_temporary_timeout_', '') AS transient_name
 				FROM {$wpdb->options}
-				WHERE option_name LIKE '\_temporary\_timeout\__%%'
-				AND option_value < %s
-				",
+				WHERE option_name LIKE %s
+				AND option_value < %d",
+				$wpdb->esc_like( '_temporary_timeout_' ) . '%',
 				$older_than_time
 			)
 		);
@@ -644,27 +643,25 @@ class WP_Temporary {
 		if ( is_multisite() ) {
 			$temporaries = $wpdb->get_col(
 				$wpdb->prepare(
-					"
-					SELECT REPLACE(meta_key, '_site_temporary_timeout_', '') AS temporary_name
+					"SELECT REPLACE(meta_key, '_site_temporary_timeout_', '') AS temporary_name
 					FROM {$wpdb->sitemeta}
-					WHERE meta_key LIKE '\_site\_temporary\_timeout\__%%'
-					AND meta_value < %s
-					",
+					WHERE meta_key LIKE %s
+					AND meta_value < %d",
+					$wpdb->esc_like( '_site_temporary_timeout_' ) . '%',
 					$older_than_time
 				)
-			);
+			); // WPCS: cache ok.
 		} else {
 			$temporaries = $wpdb->get_col(
 				$wpdb->prepare(
-					"
-					SELECT REPLACE(option_name, '_site_temporary_timeout_', '') AS temporary_name
+					"SELECT REPLACE(option_name, '_site_temporary_timeout_', '') AS temporary_name
 					FROM {$wpdb->options}
-					WHERE option_name LIKE '\_site\_temporary\_timeout\__%%'
-					AND option_value < %s
-					",
+					WHERE option_name LIKE %s
+					AND option_value < %d",
+					$wpdb->esc_like( '_site_temporary_timeout_' ) . '%',
 					$older_than_time
 				)
-			);
+			); // WPCS: cache ok.
 		}
 
 		foreach ( $temporaries as $temporary ) {
