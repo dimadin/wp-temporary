@@ -46,7 +46,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 *
 			 * @param string $temporary Temporary name.
 			 */
-			do_action( 'delete_temporary_' . $temporary, $temporary );
+			do_action( "delete_temporary_{$temporary}", $temporary );
 
 			$option_timeout = '_temporary_timeout_' . $temporary;
 			$option         = '_temporary_' . $temporary;
@@ -99,7 +99,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 *                             of the temporary, and return the returned value.
 			 * @param string $temporary    Temporary name.
 			 */
-			$pre = apply_filters( 'pre_temporary_' . $temporary, false, $temporary );
+			$pre = apply_filters( "pre_temporary_{$temporary}", false, $temporary );
 			if ( false !== $pre ) {
 				return $pre;
 			}
@@ -133,7 +133,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value     Value of temporary.
 			 * @param string $temporary Temporary name.
 			 */
-			return apply_filters( 'temporary_' . $temporary, $value, $temporary );
+			return apply_filters( "temporary_{$temporary}", $value, $temporary );
 		}
 
 		/**
@@ -167,7 +167,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param int    $expiration Time until expiration in seconds.
 			 * @param string $temporary  Temporary name.
 			 */
-			$value = apply_filters( 'pre_set_temporary_' . $temporary, $value, $expiration, $temporary );
+			$value = apply_filters( "pre_set_temporary_{$temporary}", $value, $expiration, $temporary );
 
 			/**
 			 * Filter the expiration for a temporary before its value is set.
@@ -180,7 +180,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value      New value of temporary.
 			 * @param string $temporary  Temporary name.
 			 */
-			$expiration = apply_filters( 'expiration_of_temporary_' . $temporary, $expiration, $value, $temporary );
+			$expiration = apply_filters( "expiration_of_temporary_{$temporary}", $expiration, $value, $temporary );
 
 			$temporary_timeout = '_temporary_timeout_' . $temporary;
 			$temporary_option  = '_temporary_' . $temporary;
@@ -223,7 +223,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
-				do_action( 'set_temporary_' . $temporary, $value, $expiration, $temporary );
+				do_action( "set_temporary_{$temporary}", $value, $expiration, $temporary );
 
 				/**
 				 * Fires after the value for a temporary has been set.
@@ -268,7 +268,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value     New value of temporary.
 			 * @param string $temporary Temporary name.
 			 */
-			$value = apply_filters( 'pre_update_temporary_' . $temporary, $value, $temporary );
+			$value = apply_filters( "pre_update_temporary_{$temporary}", $value, $temporary );
 
 			$temporary_option = '_temporary_' . $temporary;
 
@@ -294,7 +294,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
-				do_action( 'update_temporary_' . $temporary, $value, $expiration, $temporary );
+				do_action( "update_temporary_{$temporary}", $value, $expiration, $temporary );
 
 				/**
 				 * Fires after the value for a temporary has been updated.
@@ -331,7 +331,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 *
 			 * @param string $temporary Temporary name.
 			 */
-			do_action( 'delete_site_temporary_' . $temporary, $temporary );
+			do_action( "delete_site_temporary_{$temporary}", $temporary );
 
 			$option_timeout = '_site_temporary_timeout_' . $temporary;
 			$option         = '_site_temporary_' . $temporary;
@@ -386,7 +386,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 *                                   of the temporary, and return the returned value.
 			 * @param string $temporary          Temporary name.
 			 */
-			$pre = apply_filters( 'pre_site_temporary_' . $temporary, false, $temporary );
+			$pre = apply_filters( "pre_site_temporary_{ $temporary}", false, $temporary );
 
 			if ( false !== $pre ) {
 				return $pre;
@@ -419,7 +419,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value     Value of site temporary.
 			 * @param string $temporary Temporary name.
 			 */
-			return apply_filters( 'site_temporary_' . $temporary, $value, $temporary );
+			return apply_filters( "site_temporary_{$temporary}", $value, $temporary );
 		}
 
 		/**
@@ -451,7 +451,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value     New value of site temporary.
 			 * @param string $temporary Temporary name.
 			 */
-			$value = apply_filters( 'pre_set_site_temporary_' . $temporary, $value, $temporary );
+			$value = apply_filters( "pre_set_site_temporary_{$temporary}", $value, $temporary );
 
 			$expiration = (int) $expiration;
 
@@ -466,7 +466,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value      New value of site temporary.
 			 * @param string $temporary  Temporary name.
 			 */
-			$expiration = apply_filters( 'expiration_of_site_temporary_' . $temporary, $expiration, $value, $temporary );
+			$expiration = apply_filters( "expiration_of_site_temporary_{$temporary}", $expiration, $value, $temporary );
 
 			$temporary_timeout = '_site_temporary_timeout_' . $temporary;
 			$option            = '_site_temporary_' . $temporary;
@@ -495,7 +495,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
-				do_action( 'set_site_temporary_' . $temporary, $value, $expiration, $temporary );
+				do_action( "set_site_temporary_{$temporary}", $value, $expiration, $temporary );
 
 				/**
 				 * Fires after the value for a site temporary has been set.
@@ -542,7 +542,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 * @param mixed  $value     New value of temporary.
 			 * @param string $temporary Temporary name.
 			 */
-			$value = apply_filters( 'pre_update_site_temporary_' . $temporary, $value, $temporary );
+			$value = apply_filters( "pre_update_site_temporary_{$temporary}", $value, $temporary );
 
 			$temporary_option = '_site_temporary_' . $temporary;
 
@@ -568,7 +568,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
-				do_action( 'update_site_temporary_' . $temporary, $value, $expiration, $temporary );
+				do_action( "update_site_temporary_{$temporary}", $value, $expiration, $temporary );
 
 				/**
 				 * Fires after the value for a temporary has been updated.
