@@ -105,8 +105,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			}
 
 			$temporary_option = '_temporary_' . $temporary;
-			// NOTE: originally line below has WP 4.4+ function; use pre-4.4 code.
-			if ( ! defined( 'WP_INSTALLING' ) ) {
+			if ( ! wp_installing() ) {
 				// If option is not in alloptions, it is not autoloaded and thus has a timeout.
 				$alloptions = wp_load_alloptions();
 				if ( ! isset( $alloptions[ $temporary_option ] ) ) {
