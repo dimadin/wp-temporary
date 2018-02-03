@@ -147,7 +147,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 * @access public
 		 *
 		 * @param string $temporary  Temporary name. Expected to not be SQL-escaped. Must be
-		 *                           45 characters or fewer in length.
+		 *                           172 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Must be serializable if non-scalar.
 		 *                           Expected to not be SQL-escaped.
 		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
@@ -251,7 +251,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 * @access public
 		 *
 		 * @param string $temporary  Temporary name. Expected to not be SQL-escaped. Must be
-		 *                           45 characters or fewer in length.
+		 *                           172 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Must be serializable if non-scalar.
 		 *                           Expected to not be SQL-escaped.
 		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
@@ -435,7 +435,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 * @see WP_Temporary::set()
 		 *
 		 * @param string $temporary  Temporary name. Expected to not be SQL-escaped. Must be
-		 *                           40 characters or fewer in length.
+		 *                           167 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Expected to not be SQL-escaped.
 		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
 		 * @return bool False if value was not set and true if value was set.
@@ -525,7 +525,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 * @see WP_Temporary::update()
 		 *
 		 * @param string $temporary  Temporary name. Expected to not be SQL-escaped. Must be
-		 *                           45 characters or fewer in length.
+		 *                           167 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Must be serializable if non-scalar.
 		 *                           Expected to not be SQL-escaped.
 		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
