@@ -139,6 +139,8 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		/**
 		 * Set/update the value of a temporary.
 		 *
+		 * If updating and expiration is passed, it will start expiration from now.
+		 *
 		 * You do not need to serialize values. If the value needs to be serialized, then
 		 * it will be serialized before it is set.
 		 *
@@ -242,6 +244,8 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 
 		/**
 		 * Update the value of a temporary with existing timeout.
+		 *
+		 * If temporary doesn't exist, it will set new temporary.
 		 *
 		 * You do not need to serialize values. If the value needs to be serialized, then
 		 * it will be serialized before it is updated.
@@ -425,6 +429,8 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		/**
 		 * Set/update the value of a site temporary.
 		 *
+		 * If updating and expiration is passed, it will start expiration from now.
+		 *
 		 * You do not need to serialize values, if the value needs to be serialize, then
 		 * it will be serialized before it is set.
 		 *
@@ -514,6 +520,8 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 
 		/**
 		 * Update the value of a site temporary with existing timeout.
+		 *
+		 * If site temporary doesn't exist, it will set new site temporary.
 		 *
 		 * You do not need to serialize values. If the value needs to be serialized, then
 		 * it will be serialized before it is updated.
