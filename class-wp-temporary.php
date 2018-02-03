@@ -150,7 +150,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 *                           172 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Must be serializable if non-scalar.
 		 *                           Expected to not be SQL-escaped.
-		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
+		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
 		 * @return bool False if value was not set and true if value was set.
 		 */
 		public static function set( $temporary, $value, $expiration = 0 ) {
@@ -221,7 +221,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @since 1.0.0
 				 *
 				 * @param mixed  $value      Temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
 				do_action( 'set_temporary_' . $temporary, $value, $expiration, $temporary );
@@ -233,7 +233,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 *
 				 * @param string $temporary  The name of the temporary.
 				 * @param mixed  $value      Temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 */
 				do_action( 'setted_temporary', $temporary, $value, $expiration );
 			}
@@ -254,7 +254,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 *                           172 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Must be serializable if non-scalar.
 		 *                           Expected to not be SQL-escaped.
-		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
+		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
 		 * @return bool False if value was not updated and true if value was updated.
 		 */
 		public static function update( $temporary, $value, $expiration = 0 ) {
@@ -292,7 +292,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @since 1.0.0
 				 *
 				 * @param mixed  $value      Temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
 				do_action( 'update_temporary_' . $temporary, $value, $expiration, $temporary );
@@ -304,7 +304,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 *
 				 * @param string $temporary  The name of the temporary.
 				 * @param mixed  $value      Temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 */
 				do_action( 'updated_temporary', $temporary, $value, $expiration );
 			}
@@ -437,7 +437,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 * @param string $temporary  Temporary name. Expected to not be SQL-escaped. Must be
 		 *                           167 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Expected to not be SQL-escaped.
-		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
+		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
 		 * @return bool False if value was not set and true if value was set.
 		 */
 		public static function set_site( $temporary, $value, $expiration = 0 ) {
@@ -449,7 +449,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 *
 			 * @since 1.0.0
 			 *
-			 * @param mixed  $value     Value of site temporary.
+			 * @param mixed  $value     New value of site temporary.
 			 * @param string $temporary Temporary name.
 			 */
 			$value = apply_filters( 'pre_set_site_temporary_' . $temporary, $value, $temporary );
@@ -493,7 +493,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @since 1.0.0
 				 *
 				 * @param mixed  $value      Site temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
 				do_action( 'set_site_temporary_' . $temporary, $value, $expiration, $temporary );
@@ -505,7 +505,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 *
 				 * @param string $temporary  The name of the site temporary.
 				 * @param mixed  $value      Site temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 */
 				do_action( 'setted_site_temporary', $temporary, $value, $expiration );
 			}
@@ -528,7 +528,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 *                           167 characters or fewer in length.
 		 * @param mixed  $value      Temporary value. Must be serializable if non-scalar.
 		 *                           Expected to not be SQL-escaped.
-		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0.
+		 * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
 		 * @return bool False if value was not updated and true if value was updated.
 		 */
 		public static function update_site( $temporary, $value, $expiration = 0 ) {
@@ -566,7 +566,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 * @since 1.0.0
 				 *
 				 * @param mixed  $value      Temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 * @param string $temporary  Temporary name.
 				 */
 				do_action( 'update_site_temporary_' . $temporary, $value, $expiration, $temporary );
@@ -578,7 +578,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 				 *
 				 * @param string $temporary  The name of the temporary.
 				 * @param mixed  $value      Temporary value.
-				 * @param int    $expiration Time until expiration in seconds. Default 0.
+				 * @param int    $expiration Time until expiration in seconds.
 				 */
 				do_action( 'updated_site_temporary', $temporary, $value, $expiration );
 			}
