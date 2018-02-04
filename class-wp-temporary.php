@@ -27,6 +27,15 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 	 */
 	class WP_Temporary {
 		/**
+		 * Version of WP_Temporary.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @var string
+		 */
+		const VERSION = '1.1.0';
+
+		/**
 		 * Delete a temporary.
 		 *
 		 * @since 1.0.0
