@@ -688,5 +688,19 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 */
 			do_action( 'wp_temporary_clean_after' );
 		}
+
+		/**
+		 * Add WP-CLI commands.
+		 *
+		 * @since 1.0.0
+		 */
+		public static function init_wp_cli() {
+			// Only if this is WP-CLI request.
+			if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+				return;
+			}
+
+			WP_CLI::add_command( 'temporary', 'Temporary_Command' );
+		}
 	}
 endif;

@@ -13,6 +13,6 @@
 		}
 	],
 	"autoload": {
-		"classmap": ["class-wp-temporary.php"]
+		"classmap": ["class-wp-temporary.php","cli/Temporary_Command.php"]
 	}
 }
