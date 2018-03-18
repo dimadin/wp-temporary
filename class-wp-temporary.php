@@ -29,11 +29,11 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		/**
 		 * Version of WP_Temporary.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.1.0';
+		const VERSION = '1.0.0';
 
 		/**
 		 * Delete a temporary.
