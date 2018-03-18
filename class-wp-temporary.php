@@ -639,7 +639,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			// Clean single site temporaries.
 			$temporaries = $wpdb->get_col(
 				$wpdb->prepare(
-					"SELECT REPLACE(option_name, '_temporary_timeout_', '') AS transient_name
+					"SELECT REPLACE(option_name, '_temporary_timeout_', '') AS temporary_name
 					FROM {$wpdb->options}
 					WHERE option_name LIKE %s
 					AND option_value < %d",
