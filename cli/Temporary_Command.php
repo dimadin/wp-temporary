@@ -1,4 +1,11 @@
 <?php
+/**
+ * Temporary_Command class
+ *
+ * @package WP_Temporary
+ * @subpackage WP_CLI
+ * @since 1.0.0
+ */
 
 if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Command' ) ) :
 	/**
@@ -34,6 +41,8 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 	 *     # Delete all temporaries.
 	 *     $ wp temporary delete --all
 	 *     Success: 14 temporaries deleted from the database.
+	 *
+	 * @since 1.0.0
 	 */
 	class Temporary_Command extends WP_CLI_Command {
 
@@ -69,6 +78,11 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		 *
 		 *     # Get all temporaries.
 		 *     $ wp temporary get --all
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $args Array of positional arguments.
+		 * @param array $assoc_args Associative array of associative arguments.
 		 */
 		public function get( $args, $assoc_args ) {
 			list( $key ) = $args;
@@ -119,6 +133,11 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		 *
 		 *     $ wp temporary set sample_key "test data" 3600
 		 *     Success: Temporary added.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $args Array of positional arguments.
+		 * @param array $assoc_args Associative array of associative arguments.
 		 */
 		public function set( $args, $assoc_args ) {
 			list( $key, $value ) = $args;
@@ -159,6 +178,11 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		 *
 		 *     $ wp temporary update sample_key "test data" 3600
 		 *     Success: Temporary updated.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $args Array of positional arguments.
+		 * @param array $assoc_args Associative array of associative arguments.
 		 */
 		public function update( $args, $assoc_args ) {
 			list( $key, $value ) = $args;
@@ -197,9 +221,14 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		 *     # Delete all temporaries.
 		 *     $ wp temporary delete --all
 		 *     Success: 14 temporaries deleted from the database.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $args Array of positional arguments.
+		 * @param array $assoc_args Associative array of associative arguments.
 		 */
 		public function delete( $args, $assoc_args ) {
-			$key = ( ! empty( $args ) ) ? $args[0] : NULL;
+			$key = ( ! empty( $args ) ) ? $args[0] : null;
 
 			// Whether to delete all temporaries.
 			$all = WP_CLI\Utils\get_flag_value( $assoc_args, 'all' );
@@ -234,6 +263,11 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		 *
 		 *     $ wp temporary clean
 		 *     Success: Expired temporaries deleted from the database.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $args Array of positional arguments.
+		 * @param array $assoc_args Associative array of associative arguments.
 		 */
 		public function clean( $args, $assoc_args ) {
 			WP_Temporary::clean();
@@ -247,7 +281,9 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		/**
 		 * Display table with of all temporaries in the database.
 		 *
-		 * @param boolean $for_network Whether to look for single site or network temporaries.
+		 * @since 1.0.0
+		 *
+		 * @param bool $for_network Whether to look for single site or network temporaries.
 		 */
 		protected function get_all( $for_network = false ) {
 			$items = array();
@@ -295,6 +331,8 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 
 		/**
 		 * Deletes all temporaries.
+		 *
+		 * @since 1.0.0
 		 */
 		protected function delete_all() {
 			$count = 0;
@@ -310,7 +348,7 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 			}
 
 			if ( $count > 0 ) {
-				if ( 1 == $count ) {
+				if ( 1 === $count ) {
 					$string = '%d temporary deleted from the database.';
 				} else {
 					$string = '%d temporaries deleted from the database.';
@@ -333,7 +371,9 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 		/**
 		 * Get names of all temporaries in the database.
 		 *
-		 * @param boolean $for_network Whether to look for single site or network temporaries.
+		 * @since 1.0.0
+		 *
+		 * @param bool $for_network Whether to look for single site or network temporaries.
 		 * @return array $keys
 		 */
 		protected function get_all_keys( $for_network = false ) {
@@ -342,7 +382,7 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 			if ( $for_network ) {
 				if ( is_multisite() ) {
 					// Get temporaries names in multisite environment.
-					$keys = $wpdb->get_col(
+					$keys = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 						$wpdb->prepare(
 							"SELECT REPLACE(meta_key, '_site_temporary_', '') AS temporary_name
 							FROM {$wpdb->sitemeta}
@@ -351,10 +391,10 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 							$wpdb->esc_like( '_site_temporary_' ) . '%',
 							$wpdb->esc_like( '_site_temporary_timeout_' ) . '%'
 						)
-					); // WPCS: cache ok.
+					);
 				} else {
 					// Get temporaries names in single site environment.
-					$keys = $wpdb->get_col(
+					$keys = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 						$wpdb->prepare(
 							"SELECT REPLACE(option_name, '_site_temporary_', '') AS temporary_name
 							FROM {$wpdb->options}
@@ -363,11 +403,11 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 							$wpdb->esc_like( '_site_temporary_' ) . '%',
 							$wpdb->esc_like( '_site_temporary_timeout_' ) . '%'
 						)
-					); // WPCS: cache ok.
+					);
 				}
 			} else {
 				// Get single site temporaries names.
-				$keys = $wpdb->get_col(
+				$keys = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->prepare(
 						"SELECT REPLACE(option_name, '_temporary_', '') AS temporary_name
 						FROM {$wpdb->options}
@@ -376,7 +416,7 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 						$wpdb->esc_like( '_temporary_' ) . '%',
 						$wpdb->esc_like( '_temporary_timeout_' ) . '%'
 					)
-				); // WPCS: cache ok.
+				);
 			}
 
 			return $keys;
@@ -384,6 +424,8 @@ if ( ! class_exists( 'Temporary_Command', false ) && class_exists( 'WP_CLI_Comma
 
 		/**
 		 * Format number of seconds since the Unix Epoch to human readable form.
+		 *
+		 * @since 1.0.0
 		 *
 		 * @param int $timeout Number of seconds since the Unix Epoch.
 		 * @return string

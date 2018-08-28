@@ -164,7 +164,6 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 		 * @return bool False if value was not set and true if value was set.
 		 */
 		public static function set( $temporary, $value, $expiration = 0 ) {
-
 			$expiration = (int) $expiration;
 
 			/**
@@ -287,8 +286,8 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 
 			// If temporary doesn't exist, create new one,
 			// otherwise update it with new value.
-			if ( false === WP_Temporary::get( $temporary ) ) {
-				$result = WP_Temporary::set( $temporary, $value, $expiration );
+			if ( false === self::get( $temporary ) ) {
+				$result = self::set( $temporary, $value, $expiration );
 			} else {
 				$temporary_option = '_temporary_' . $temporary;
 				$result           = update_option( $temporary_option, $value );
@@ -408,7 +407,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			// Core temporaries that do not have a timeout. Listed here so querying timeouts can be avoided.
 			$no_timeout       = array( 'update_core', 'update_plugins', 'update_themes' );
 			$temporary_option = '_site_temporary_' . $temporary;
-			if ( ! in_array( $temporary, $no_timeout ) ) {
+			if ( ! in_array( $temporary, $no_timeout, true ) ) {
 				$temporary_timeout = '_site_temporary_timeout_' . $temporary;
 				$timeout           = get_site_option( $temporary_timeout );
 				if ( false !== $timeout && $timeout < time() ) {
@@ -565,8 +564,8 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 
 			// If temporary doesn't exist, create new one,
 			// otherwise update it with new value.
-			if ( false === WP_Temporary::get_site( $temporary ) ) {
-				$result = WP_Temporary::set_site( $temporary, $value, $expiration );
+			if ( false === self::get_site( $temporary ) ) {
+				$result = self::set_site( $temporary, $value, $expiration );
 			} else {
 				$temporary_option = '_site_temporary_' . $temporary;
 				$result           = update_site_option( $temporary_option, $value );
@@ -637,7 +636,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			$older_than_time = time() - MINUTE_IN_SECONDS;
 
 			// Clean single site temporaries.
-			$temporaries = $wpdb->get_col(
+			$temporaries = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					"SELECT REPLACE(option_name, '_temporary_timeout_', '') AS temporary_name
 					FROM {$wpdb->options}
@@ -646,15 +645,15 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 					$wpdb->esc_like( '_temporary_timeout_' ) . '%',
 					$older_than_time
 				)
-			); // WPCS: cache ok.
+			);
 
 			foreach ( $temporaries as $temporary ) {
-				WP_Temporary::get( $temporary );
+				self::get( $temporary );
 			}
 
 			// Clean network wide temporaries.
 			if ( is_multisite() ) {
-				$temporaries = $wpdb->get_col(
+				$temporaries = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->prepare(
 						"SELECT REPLACE(meta_key, '_site_temporary_timeout_', '') AS temporary_name
 						FROM {$wpdb->sitemeta}
@@ -663,9 +662,9 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 						$wpdb->esc_like( '_site_temporary_timeout_' ) . '%',
 						$older_than_time
 					)
-				); // WPCS: cache ok.
+				);
 			} else {
-				$temporaries = $wpdb->get_col(
+				$temporaries = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->prepare(
 						"SELECT REPLACE(option_name, '_site_temporary_timeout_', '') AS temporary_name
 						FROM {$wpdb->options}
@@ -674,11 +673,11 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 						$wpdb->esc_like( '_site_temporary_timeout_' ) . '%',
 						$older_than_time
 					)
-				); // WPCS: cache ok.
+				);
 			}
 
 			foreach ( $temporaries as $temporary ) {
-				WP_Temporary::get_site( $temporary );
+				self::get_site( $temporary );
 			}
 
 			/**
