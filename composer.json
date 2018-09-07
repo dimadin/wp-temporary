@@ -12,6 +12,10 @@
 			"homepage": "https://milandinic.com/"
 		}
 	],
+	"support": {
+		"issues": "https://github.com/dimadin/wp-temporary/issues",
+		"source": "https://github.com/dimadin/wp-temporary"
+	},
 	"autoload": {
 		"classmap": ["class-wp-temporary.php","cli/Temporary_Command.php"]
 	}
