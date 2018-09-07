@@ -1,6 +1,6 @@
 {
 	"name": "dimadin/wp-temporary",
-	"description": "WP_Temporary",
+	"description": "WordPress library to cache data to the database. Like transients without object cache.",
 	"keywords": ["cache"],
 	"homepage": "https://github.com/dimadin/wp-temporary",
 	"type": "library",
