@@ -398,7 +398,7 @@ if ( ! class_exists( 'WP_Temporary', false ) ) :
 			 *                                   of the temporary, and return the returned value.
 			 * @param string $temporary          Temporary name.
 			 */
-			$pre = apply_filters( "pre_site_temporary_{ $temporary}", false, $temporary );
+			$pre = apply_filters( "pre_site_temporary_{$temporary}", false, $temporary );
 
 			if ( false !== $pre ) {
 				return $pre;
