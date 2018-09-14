@@ -23,6 +23,8 @@ Alternately, you can download file `class-wp-temporary.php` and include it in yo
 
 ## API
 
+Full code reference is available at [http://api.milandinic.com/wp-temporary/](http://api.milandinic.com/wp-temporary/)
+
 ### WP_Temporary::set()
 
 Equivalent of [`set_transient()`](https://developer.wordpress.org/reference/functions/set_transient/).
