@@ -1,6 +1,7 @@
 # WP_Temporary
 
 [![Build Status](https://www.travis-ci.org/dimadin/wp-temporary.svg?branch=master)](https://www.travis-ci.org/dimadin/wp-temporary)
+[![Latest Stable Version](https://poser.pugx.org/dimadin/wp-temporary/version)](https://packagist.org/packages/dimadin/wp-temporary)
 
 `WP_Temporary` is a helper class with a group of static methods that are used the same way as counterpart transient functions for storing data in the database until they expire. Basically, it's the same as when transient is stored in the database (with object cache disabled) so it isn't deleted until it expires.
 
